@@ -1,25 +1,40 @@
 import React from 'react';
 import { Cpu, Radio, Compass, Zap, Layers, Sparkles, BookOpen, ExternalLink, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logoImg from '../assets/logo.png';
 
 export const ProjectPage: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16 animate-fadeIn">
       
-      {/* Page Header */}
-      <div className="bg-obsidian-900 border border-obsidian-800 rounded-2xl p-6 sm:p-10 space-y-3 reticle-box">
-        <div className="flex items-center space-x-2 text-[#9F80F8] font-mono text-xs uppercase tracking-wider">
-          <Cpu className="w-4 h-4 text-[#9F80F8]" />
-          <span>Scientific Mission &amp; System Architecture</span>
+      {/* Page Header with Official Mission Logo */}
+      <div className="bg-obsidian-900 border border-obsidian-800 rounded-2xl p-6 sm:p-10 reticle-box flex flex-col md:flex-row items-center md:items-center justify-between gap-8">
+        <div className="space-y-3 flex-1">
+          <div className="flex items-center space-x-2 text-[#9F80F8] font-mono text-xs uppercase tracking-wider">
+            <Cpu className="w-4 h-4 text-[#9F80F8]" />
+            <span>Scientific Mission &amp; System Architecture</span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-sans">
+            The CRACO RRATs Project
+          </h1>
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-light max-w-2xl">
+            A comprehensive overview of the astrophysical motivations, the mathematical challenge of 
+            low-DM blindness in traditional single-dish surveys, and how the CRACO coherent image-plane upgrade 
+            to ASKAP and Murriyang / Parkes follow-up are resolving the true Galactic population of sporadic neutron stars.
+          </p>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-sans">
-          The CRACO RRATs Project
-        </h1>
-        <p className="text-slate-300 text-sm sm:text-base max-w-3xl leading-relaxed font-light">
-          A comprehensive overview of the astrophysical motivations, the mathematical challenge of 
-          low-DM blindness in traditional single-dish surveys, and how the CRACO coherent image-plane upgrade 
-          to ASKAP and Murriyang / Parkes follow-up are resolving the true Galactic population of sporadic neutron stars.
-        </p>
+
+        {/* Right Side Mission Emblem */}
+        <div className="flex-shrink-0">
+          <div className="relative group">
+            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#6C3DF2] via-[#9F80F8] to-cyan-400 opacity-30 group-hover:opacity-60 blur-xl transition duration-500"></div>
+            <img
+              src={logoImg}
+              alt="CRACO RRATs Mission Emblem"
+              className="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full object-cover shadow-2xl border-2 border-[#9F80F8]/50 group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        </div>
       </div>
 
       {/* SECTION 1: What is an RRAT? */}
