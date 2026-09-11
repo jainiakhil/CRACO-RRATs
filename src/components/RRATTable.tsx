@@ -69,16 +69,16 @@ export const RRATTable: React.FC<RRATTableProps> = ({ data, onSelect }) => {
   const renderSortIndicator = (field: SortField) => {
     if (sortField !== field) return null;
     return sortAsc ? (
-      <ChevronUp className="w-3.5 h-3.5 inline ml-1 text-cyan-400" />
+      <ChevronUp className="w-3.5 h-3.5 inline ml-1 text-[#9F80F8]" />
     ) : (
-      <ChevronDown className="w-3.5 h-3.5 inline ml-1 text-cyan-400" />
+      <ChevronDown className="w-3.5 h-3.5 inline ml-1 text-[#9F80F8]" />
     );
   };
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-800 bg-space-950 shadow-xl">
+    <div className="overflow-x-auto rounded-xl border border-obsidian-800 bg-obsidian-950 shadow-xl reticle-box">
       <table className="w-full text-left text-xs border-collapse">
-        <thead className="bg-slate-900/90 text-slate-300 font-mono text-[11px] uppercase tracking-wider border-b border-slate-800 sticky top-0 z-10 backdrop-blur">
+        <thead className="bg-obsidian-900/90 text-slate-300 font-mono text-[11px] uppercase tracking-wider border-b border-obsidian-800 sticky top-0 z-10 backdrop-blur">
           <tr>
             <th onClick={() => handleSort('name')} className="py-3.5 px-4 cursor-pointer hover:text-white">
               Source Name {renderSortIndicator('name')}
@@ -112,19 +112,19 @@ export const RRATTable: React.FC<RRATTableProps> = ({ data, onSelect }) => {
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-800/60 font-mono">
+        <tbody className="divide-y divide-obsidian-800/80 font-mono">
           {sortedData.map((rrat) => {
             const dm = rrat.properties.best_dm_pc_cm3 ?? rrat.discovery_info.detection_dm_pc_cm3 ?? 0;
             return (
               <tr
                 key={rrat.source_name}
                 onClick={() => onSelect(rrat)}
-                className="hover:bg-slate-900/60 transition-colors cursor-pointer group"
+                className="hover:bg-obsidian-900/80 transition-colors cursor-pointer group"
               >
-                <td className="py-3 px-4 font-bold text-white group-hover:text-cyan-300">
+                <td className="py-3 px-4 font-bold text-white group-hover:text-[#C4B2FB]">
                   {rrat.source_name}
                 </td>
-                <td className="py-3 px-3 text-cyan-300 font-semibold">
+                <td className="py-3 px-3 text-[#9F80F8] font-semibold">
                   {dm.toFixed(1)}
                 </td>
                 <td className="py-3 px-3 text-slate-200">
@@ -158,7 +158,7 @@ export const RRATTable: React.FC<RRATTableProps> = ({ data, onSelect }) => {
                       e.stopPropagation();
                       onSelect(rrat);
                     }}
-                    className="inline-flex items-center space-x-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-cyan-900/60 text-slate-300 hover:text-cyan-200 text-xs transition border border-slate-700"
+                    className="inline-flex items-center space-x-1 px-2.5 py-1 rounded bg-obsidian-850 hover:bg-violet-950/70 text-slate-300 hover:text-[#C4B2FB] text-xs transition border border-obsidian-750 hover:border-[#9F80F8]/40"
                   >
                     <span>Inspect</span>
                     <ExternalLink className="w-3 h-3" />

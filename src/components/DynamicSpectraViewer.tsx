@@ -254,14 +254,14 @@ export const DynamicSpectraViewer: React.FC<DynamicSpectraViewerProps> = ({ rrat
   };
 
   return (
-    <div className={`relative bg-space-950 border border-slate-800 rounded-xl overflow-hidden p-3 ${isFullscreen ? 'fixed inset-4 z-50 flex flex-col justify-center items-center shadow-2xl bg-space-950/98' : ''}`}>
+    <div className={`relative bg-obsidian-950 border border-obsidian-800 rounded-xl overflow-hidden p-3 ${isFullscreen ? 'fixed inset-4 z-50 flex flex-col justify-center items-center shadow-2xl bg-obsidian-950/98' : ''}`}>
       {/* Top Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2 border-b border-slate-800/80 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2 border-b border-obsidian-800 text-xs font-mono">
         <div className="flex items-center space-x-2">
-          <span className="font-semibold text-cyan-300 font-mono">
+          <span className="font-semibold text-[#C4B2FB]">
             {rrat.source_name}
           </span>
-          <span className="text-slate-500">•</span>
+          <span className="text-slate-600">•</span>
           <span className="text-slate-400">
             S/N: <strong className="text-white">{snr.toFixed(1)}</strong>
           </span>
@@ -273,8 +273,8 @@ export const DynamicSpectraViewer: React.FC<DynamicSpectraViewerProps> = ({ rrat
             onClick={() => setDedispersed(!dedispersed)}
             className={`px-2.5 py-1 rounded-md text-xs font-mono transition-colors border ${
               dedispersed
-                ? 'bg-cyan-950/80 text-cyan-300 border-cyan-500/40 hover:bg-cyan-900/60'
-                : 'bg-indigo-950/80 text-indigo-300 border-indigo-500/40 hover:bg-indigo-900/60'
+                ? 'bg-violet-950/80 text-[#C4B2FB] border-[#9F80F8]/50 hover:bg-violet-900/60'
+                : 'bg-obsidian-850 text-slate-300 border-obsidian-750 hover:bg-obsidian-800'
             }`}
             title="Toggle between dedispersed and raw sweep view"
           >
@@ -285,29 +285,30 @@ export const DynamicSpectraViewer: React.FC<DynamicSpectraViewerProps> = ({ rrat
           <select
             value={colormap}
             onChange={(e) => setColormap(e.target.value as ColormapName)}
-            className="bg-slate-900 text-slate-300 border border-slate-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-cyan-500"
+            style={{ backgroundColor: '#090b10', color: '#f1f5f9' }}
+            className="bg-[#090b10] text-slate-200 border border-obsidian-750 rounded px-2 py-1 text-xs focus:outline-none focus:border-[#9F80F8]"
             title="Color Palette"
           >
-            <option value="inferno">Inferno</option>
-            <option value="viridis">Viridis</option>
-            <option value="plasma">Plasma</option>
-            <option value="greys">Greys</option>
+            <option value="inferno" style={{ backgroundColor: '#0e1118', color: '#ffffff' }}>Inferno</option>
+            <option value="viridis" style={{ backgroundColor: '#0e1118', color: '#ffffff' }}>Viridis</option>
+            <option value="plasma" style={{ backgroundColor: '#0e1118', color: '#ffffff' }}>Plasma</option>
+            <option value="greys" style={{ backgroundColor: '#0e1118', color: '#ffffff' }}>Greys</option>
           </select>
 
           {/* Download Plot */}
           <button
             onClick={handleDownloadImage}
-            className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+            className="p-1 rounded bg-obsidian-850 hover:bg-obsidian-800 text-slate-300 hover:text-white border border-obsidian-750 transition-colors"
             title="Download PNG Plot"
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download className="w-3.5 h-3.5 text-[#9F80F8]" />
           </button>
 
           {/* Fullscreen */}
           {!compact && (
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+              className="p-1 rounded bg-obsidian-850 hover:bg-obsidian-800 text-slate-300 hover:text-white border border-obsidian-750 transition-colors"
               title={isFullscreen ? 'Exit Fullscreen' : 'Expand Plot'}
             >
               {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -317,17 +318,17 @@ export const DynamicSpectraViewer: React.FC<DynamicSpectraViewerProps> = ({ rrat
       </div>
 
       {/* Main Canvas Area */}
-      <div className="flex justify-center items-center bg-black/40 rounded-lg p-1 overflow-x-auto">
+      <div className="flex justify-center items-center bg-black/60 rounded-lg p-1 overflow-x-auto">
         <canvas
           ref={canvasRef}
           width={compact ? 340 : isFullscreen ? 800 : 540}
           height={compact ? 220 : isFullscreen ? 480 : 340}
-          className="rounded max-w-full shadow-inner border border-slate-900"
+          className="rounded max-w-full shadow-inner border border-obsidian-850"
         />
       </div>
 
       {/* Caption & Metadata */}
-      <div className="mt-2 text-[11px] text-slate-400 flex flex-wrap justify-between items-center px-1">
+      <div className="mt-2 text-[11px] text-slate-400 flex flex-wrap justify-between items-center px-1 font-mono">
         <span>
           BW: <strong className="text-slate-300">{bandwidth} MHz</strong> ({centerFreq.toFixed(1)} MHz center)
         </span>
@@ -335,7 +336,7 @@ export const DynamicSpectraViewer: React.FC<DynamicSpectraViewerProps> = ({ rrat
           W₅₀: <strong className="text-slate-300">{widthMs.toFixed(1)} ms</strong>
         </span>
         <span>
-          DM: <strong className="text-cyan-300 font-mono">{dm.toFixed(1)} pc cm⁻³</strong>
+          DM: <strong className="text-[#9F80F8]">{dm.toFixed(1)} pc cm⁻³</strong>
         </span>
       </div>
     </div>

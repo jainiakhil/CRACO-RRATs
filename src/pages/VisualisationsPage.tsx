@@ -132,7 +132,7 @@ export const VisualisationsPage: React.FC = () => {
 
     const container = container3dRef.current;
     const width = container.clientWidth;
-    const height = container.clientHeight || 550;
+    const height = container.clientHeight || 580;
 
     // Scene, Camera, Renderer
     const scene = new THREE.Scene();
@@ -151,27 +151,27 @@ export const VisualisationsPage: React.FC = () => {
     const earthRadius = 2.5;
     const earthGeo = new THREE.SphereGeometry(earthRadius, 32, 32);
     const earthMat = new THREE.MeshBasicMaterial({
-      color: 0x0284c7,
+      color: 0x9F80F8,
       wireframe: true,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.7,
     });
     const earthMesh = new THREE.Mesh(earthGeo, earthMat);
     scene.add(earthMesh);
 
     // Earth Core Glow
     const coreGeo = new THREE.SphereGeometry(earthRadius * 0.9, 16, 16);
-    const coreMat = new THREE.MeshBasicMaterial({ color: 0x0369a1 });
+    const coreMat = new THREE.MeshBasicMaterial({ color: 0x4c2b9e });
     const coreMesh = new THREE.Mesh(coreGeo, coreMat);
     scene.add(coreMesh);
 
-    // Coordinate Rings (Equator & Ecliptic)
+    // Coordinate Rings (Equator & Ecliptic in #9F80F8)
     const ringGeo = new THREE.RingGeometry(38, 38.3, 64);
     const ringMat = new THREE.MeshBasicMaterial({
-      color: 0xf59e0b,
+      color: 0x9F80F8,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.25,
+      opacity: 0.35,
     });
     const ringMesh = new THREE.Mesh(ringGeo, ringMat);
     ringMesh.rotation.x = Math.PI / 2;
@@ -207,15 +207,15 @@ export const VisualisationsPage: React.FC = () => {
       const y = rScale * Math.sin(phi);
       const z = rScale * Math.cos(phi) * Math.sin(theta);
 
-      // Color coding by DM
+      // Color coding by DM with #9F80F8 high-DM
       const dm = rrat.properties.best_dm_pc_cm3 ?? rrat.discovery_info.detection_dm_pc_cm3 ?? 20;
       let colorHex = 0x00f0ff; // cyan default
       if (dm < 20) colorHex = 0x10b981; // emerald low-DM
       else if (dm > 500) colorHex = 0xf43f5e; // ultra high DM (J1743, J1430)
-      else if (dm > 80) colorHex = 0xf59e0b; // amber high DM
+      else if (dm > 80) colorHex = 0x9F80F8; // #9F80F8 violet high DM
 
       // Visual Star Mesh
-      const starGeo = new THREE.SphereGeometry(0.8, 12, 12);
+      const starGeo = new THREE.SphereGeometry(0.85, 12, 12);
       const starMat = new THREE.MeshBasicMaterial({ color: colorHex });
       const starMesh = new THREE.Mesh(starGeo, starMat);
       starMesh.position.set(x, y, z);
@@ -231,7 +231,7 @@ export const VisualisationsPage: React.FC = () => {
       const lineMat = new THREE.LineBasicMaterial({
         color: colorHex,
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.15,
       });
       const lineMesh = new THREE.Line(lineGeo, lineMat);
       rratPointsGroup.add(lineMesh);
@@ -239,13 +239,21 @@ export const VisualisationsPage: React.FC = () => {
 
     scene.add(rratPointsGroup);
 
-    // Simple Smooth Orbit Controls via Mouse Drag
+    // Simple Smooth Orbit Controls via Mouse Drag (Stationary by default!)
     let isDragging = false;
     let prevMouseX = 0;
     let prevMouseY = 0;
     let rotX = 0.3;
     let rotY = 0.5;
     let zoomDist = 80;
+
+    const updateCamera = () => {
+      camera.position.x = zoomDist * Math.cos(rotX) * Math.sin(rotY);
+      camera.position.y = zoomDist * Math.sin(rotX);
+      camera.position.z = zoomDist * Math.cos(rotX) * Math.cos(rotY);
+      camera.lookAt(0, 0, 0);
+    };
+    updateCamera();
 
     const onMouseDown = (e: MouseEvent) => {
       isDragging = true;
@@ -254,7 +262,7 @@ export const VisualisationsPage: React.FC = () => {
     };
 
     const onMouseMove = (e: MouseEvent) => {
-      // Rotate on Drag
+      // Rotate on Drag ONLY
       if (isDragging) {
         const deltaX = e.clientX - prevMouseX;
         const deltaY = e.clientY - prevMouseY;
@@ -263,6 +271,7 @@ export const VisualisationsPage: React.FC = () => {
         rotX = Math.max(-Math.PI / 2 + 0.1, Math.min(Math.PI / 2 - 0.1, rotX));
         prevMouseX = e.clientX;
         prevMouseY = e.clientY;
+        updateCamera();
       }
 
       // Raycasting for Hover Tooltip
@@ -293,6 +302,7 @@ export const VisualisationsPage: React.FC = () => {
       e.preventDefault();
       zoomDist += e.deltaY * 0.05;
       zoomDist = Math.max(25, Math.min(180, zoomDist));
+      updateCamera();
     };
 
     const onClick = (e: MouseEvent) => {
@@ -318,25 +328,10 @@ export const VisualisationsPage: React.FC = () => {
     dom.addEventListener('wheel', onWheel, { passive: false });
     dom.addEventListener('click', onClick);
 
-    // Animation Loop
+    // Animation Loop (NO AUTOMATIC ROTATION - STATIONARY FRAME)
     let animId: number;
     const animate = () => {
       animId = requestAnimationFrame(animate);
-
-      // Auto slow drift when not dragging
-      if (!isDragging) {
-        rotY += 0.001;
-      }
-
-      // Update camera position on sphere
-      camera.position.x = zoomDist * Math.cos(rotX) * Math.sin(rotY);
-      camera.position.y = zoomDist * Math.sin(rotX);
-      camera.position.z = zoomDist * Math.cos(rotX) * Math.cos(rotY);
-      camera.lookAt(0, 0, 0);
-
-      // Slight rotation of Earth
-      earthMesh.rotation.y += 0.004;
-
       renderer.render(scene, camera);
     };
     animate();
@@ -344,7 +339,7 @@ export const VisualisationsPage: React.FC = () => {
     const handleResize = () => {
       if (!container) return;
       const w = container.clientWidth;
-      const h = container.clientHeight || 550;
+      const h = container.clientHeight || 580;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
@@ -401,8 +396,8 @@ export const VisualisationsPage: React.FC = () => {
     };
   }, [activeScatterData, xLog, yLog]);
 
-  // Coordinate mapper for 2D plot
-  const getCanvasCoords = (xVal: number, yVal: number, width: number, height: number) => {
+  // Coordinate mapper for 2D plot (SVG 700 x 480)
+  const getCanvasCoords = (xVal: number, yVal: number, width = 700, height = 480) => {
     const padLeft = 65;
     const padRight = 30;
     const padTop = 30;
@@ -455,13 +450,13 @@ export const VisualisationsPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn bg-dot-matrix">
       
       {/* Header Banner */}
       <div className="bg-obsidian-900 border border-obsidian-800 rounded-3xl p-6 sm:p-8 space-y-3 reticle-box">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-obsidian-800 pb-4">
           <div>
-            <div className="flex items-center space-x-2 text-amber-400 font-mono text-xs uppercase tracking-wider mb-1">
+            <div className="flex items-center space-x-2 text-[#9F80F8] font-mono text-xs uppercase tracking-wider mb-1">
               <Globe className="w-4 h-4" />
               <span>Interactive Telemetry Engine</span>
             </div>
@@ -476,7 +471,7 @@ export const VisualisationsPage: React.FC = () => {
               onClick={() => setActiveTab('3d')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition ${
                 activeTab === '3d'
-                  ? 'bg-amber-500 text-obsidian-950 font-bold shadow-md shadow-amber-500/20'
+                  ? 'bg-[#9F80F8] text-obsidian-950 font-bold shadow-md shadow-[#9F80F8]/20'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -487,7 +482,7 @@ export const VisualisationsPage: React.FC = () => {
               onClick={() => setActiveTab('scatter')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition ${
                 activeTab === 'scatter'
-                  ? 'bg-amber-500 text-obsidian-950 font-bold shadow-md shadow-amber-500/20'
+                  ? 'bg-[#9F80F8] text-obsidian-950 font-bold shadow-md shadow-[#9F80F8]/20'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -499,7 +494,7 @@ export const VisualisationsPage: React.FC = () => {
 
         <p className="text-slate-400 text-xs sm:text-sm max-w-3xl">
           {activeTab === '3d'
-            ? 'Interactive 3D celestial coordinate frame mapping all 37 CRACO RRATs around Earth based on Right Ascension, Declination, and Distance (kpc). Click and drag to rotate the frame, scroll to zoom, and click any source for details.'
+            ? 'Interactive 3D celestial coordinate frame mapping all 37 CRACO RRATs around Earth based on Right Ascension, Declination, and Distance (kpc). Frame is stationary by default: click and drag to rotate the frame, scroll to zoom, and click any source for details.'
             : 'Interactive parameter-space diagram. Choose any property for the X and Y axes, toggle logarithmic scales, and selectively filter specific RRATs in real time.'}
         </p>
       </div>
@@ -509,7 +504,7 @@ export const VisualisationsPage: React.FC = () => {
       {/* ------------------------------------------------------------------ */}
       {activeTab === '3d' && (
         <div className="space-y-4">
-          <div className="relative bg-obsidian-950 border border-obsidian-800 rounded-3xl overflow-hidden shadow-2xl">
+          <div className="relative bg-obsidian-950 border border-obsidian-800 rounded-3xl overflow-hidden shadow-2xl reticle-box">
             {/* 3D WebGL Canvas Container */}
             <div
               ref={container3dRef}
@@ -519,14 +514,14 @@ export const VisualisationsPage: React.FC = () => {
             {/* Top Overlay Controls */}
             <div className="absolute top-4 left-4 z-10 flex flex-wrap items-center gap-2 text-xs font-mono">
               <div className="bg-obsidian-900/90 border border-obsidian-750 px-3 py-1.5 rounded-lg text-slate-300 backdrop-blur">
-                <span className="text-amber-400 font-bold">CLICK &amp; DRAG</span> to rotate • <span className="text-cyan-400">SCROLL</span> to zoom
+                <span className="text-[#9F80F8] font-bold">CLICK &amp; DRAG</span> to rotate • <span className="text-cyan-400">SCROLL</span> to zoom
               </div>
               <button
                 onClick={() => setResetViewTrigger(Date.now())}
                 className="flex items-center space-x-1.5 bg-obsidian-900/90 hover:bg-obsidian-800 border border-obsidian-750 px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition"
                 title="Reset Camera Angle"
               >
-                <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+                <RotateCcw className="w-3.5 h-3.5 text-[#9F80F8]" />
                 <span>Reset Frame</span>
               </button>
             </div>
@@ -545,7 +540,7 @@ export const VisualisationsPage: React.FC = () => {
                 <span className="text-slate-300">Intermediate (20–100)</span>
               </div>
               <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#9F80F8]"></span>
                 <span className="text-slate-300">High-DM (&gt; 100)</span>
               </div>
               <div className="flex items-center space-x-2">
@@ -556,13 +551,13 @@ export const VisualisationsPage: React.FC = () => {
 
             {/* Bottom Hover Telemetry Card */}
             {hoveredRrat3d && (
-              <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:max-w-md z-10 bg-obsidian-900/95 border border-amber-500/50 p-4 rounded-xl text-xs font-mono shadow-2xl backdrop-blur animate-fadeIn">
+              <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:max-w-md z-10 bg-obsidian-900/95 border border-[#9F80F8]/50 p-4 rounded-xl text-xs font-mono shadow-2xl backdrop-blur animate-fadeIn">
                 <div className="flex justify-between items-center border-b border-obsidian-800 pb-2 mb-2">
                   <div className="flex items-center space-x-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    <span className="w-2 h-2 rounded-full bg-[#9F80F8] animate-pulse"></span>
                     <span className="font-bold text-white text-sm">{hoveredRrat3d.source_name}</span>
                   </div>
-                  <span className="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/40 text-[10px]">
+                  <span className="px-2 py-0.5 rounded bg-violet-950 text-[#C4B2FB] border border-[#9F80F8]/40 text-[10px]">
                     DM {hoveredRrat3d.properties.best_dm_pc_cm3 ?? hoveredRrat3d.discovery_info.detection_dm_pc_cm3}
                   </span>
                 </div>
@@ -586,9 +581,9 @@ export const VisualisationsPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="mt-3 pt-2 border-t border-obsidian-800 text-[10px] text-amber-400 flex justify-between items-center">
+                <div className="mt-3 pt-2 border-t border-obsidian-800 text-[10px] text-[#C4B2FB] flex justify-between items-center">
                   <span>Click point to open full spectrum &amp; metadata</span>
-                  <Eye className="w-3 h-3" />
+                  <Eye className="w-3 h-3 text-[#9F80F8]" />
                 </div>
               </div>
             )}
@@ -603,23 +598,23 @@ export const VisualisationsPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           
           {/* Left Column: Axis & Filter Controls */}
-          <div className="space-y-5 bg-obsidian-900 border border-obsidian-800 p-5 rounded-2xl text-xs font-mono">
+          <div className="space-y-5 bg-obsidian-900 border border-obsidian-800 p-5 rounded-2xl text-xs font-mono reticle-box">
             
             {/* Axis Selectors */}
             <div className="space-y-3">
-              <span className="text-amber-400 font-semibold block text-[11px] uppercase tracking-wider border-b border-obsidian-800 pb-1">
+              <span className="text-[#9F80F8] font-semibold block text-[11px] uppercase tracking-wider border-b border-obsidian-800 pb-1">
                 // AXIS CONFIGURATION
               </span>
               
               {/* X-Axis */}
               <div>
-                <div className="flex justify-between items-center mb-1">
+                <div className="flex justify-between items-center mb-1.5">
                   <label className="text-slate-300 font-medium">X-Axis Property</label>
                   <button
                     onClick={() => setXLog(!xLog)}
                     className={`px-2 py-0.5 rounded text-[10px] border transition ${
                       xLog
-                        ? 'bg-amber-950 text-amber-300 border-amber-500/40'
+                        ? 'bg-violet-950 text-[#C4B2FB] border-[#9F80F8]/50'
                         : 'bg-obsidian-950 text-slate-400 border-obsidian-750'
                     }`}
                   >
@@ -629,23 +624,26 @@ export const VisualisationsPage: React.FC = () => {
                 <select
                   value={xAxis}
                   onChange={(e) => setXAxis(e.target.value as AxisProperty)}
-                  className="w-full bg-obsidian-950 border border-obsidian-750 text-white rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-amber-500"
+                  style={{ backgroundColor: '#090b10', color: '#f1f5f9' }}
+                  className="w-full bg-[#090b10] border border-obsidian-700 text-slate-100 rounded-lg px-2.5 py-2 text-xs focus:outline-none focus:border-[#9F80F8]"
                 >
                   {Object.entries(PROPERTY_LABELS).map(([key, label]) => (
-                    <option key={key} value={key}>{label}</option>
+                    <option key={key} value={key} style={{ backgroundColor: '#0e1118', color: '#ffffff' }}>
+                      {label}
+                    </option>
                   ))}
                 </select>
               </div>
 
               {/* Y-Axis */}
               <div>
-                <div className="flex justify-between items-center mb-1">
+                <div className="flex justify-between items-center mb-1.5">
                   <label className="text-slate-300 font-medium">Y-Axis Property</label>
                   <button
                     onClick={() => setYLog(!yLog)}
                     className={`px-2 py-0.5 rounded text-[10px] border transition ${
                       yLog
-                        ? 'bg-amber-950 text-amber-300 border-amber-500/40'
+                        ? 'bg-violet-950 text-[#C4B2FB] border-[#9F80F8]/50'
                         : 'bg-obsidian-950 text-slate-400 border-obsidian-750'
                     }`}
                   >
@@ -655,10 +653,13 @@ export const VisualisationsPage: React.FC = () => {
                 <select
                   value={yAxis}
                   onChange={(e) => setYAxis(e.target.value as AxisProperty)}
-                  className="w-full bg-obsidian-950 border border-obsidian-750 text-white rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-amber-500"
+                  style={{ backgroundColor: '#090b10', color: '#f1f5f9' }}
+                  className="w-full bg-[#090b10] border border-obsidian-700 text-slate-100 rounded-lg px-2.5 py-2 text-xs focus:outline-none focus:border-[#9F80F8]"
                 >
                   {Object.entries(PROPERTY_LABELS).map(([key, label]) => (
-                    <option key={key} value={key}>{label}</option>
+                    <option key={key} value={key} style={{ backgroundColor: '#0e1118', color: '#ffffff' }}>
+                      {label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -667,7 +668,7 @@ export const VisualisationsPage: React.FC = () => {
             {/* Source Selection & Deselection */}
             <div className="space-y-3 pt-3 border-t border-obsidian-800">
               <div className="flex justify-between items-center">
-                <span className="text-amber-400 font-semibold text-[11px] uppercase tracking-wider">
+                <span className="text-[#9F80F8] font-semibold text-[11px] uppercase tracking-wider">
                   // RRAT SELECTION
                 </span>
                 <span className="text-slate-400 text-[10px]">
@@ -700,13 +701,13 @@ export const VisualisationsPage: React.FC = () => {
                       onClick={() => toggleSource(rrat.source_name)}
                       className={`flex items-center justify-between px-2.5 py-1 rounded cursor-pointer transition text-[11px] ${
                         isChecked
-                          ? 'bg-obsidian-850 text-white border border-amber-500/30'
+                          ? 'bg-obsidian-850 text-white border border-[#9F80F8]/30'
                           : 'bg-obsidian-950 text-slate-500 border border-obsidian-850'
                       }`}
                     >
                       <span>{rrat.source_name}</span>
                       {isChecked ? (
-                        <CheckSquare className="w-3.5 h-3.5 text-amber-400" />
+                        <CheckSquare className="w-3.5 h-3.5 text-[#9F80F8]" />
                       ) : (
                         <Square className="w-3.5 h-3.5 text-slate-600" />
                       )}
@@ -719,19 +720,28 @@ export const VisualisationsPage: React.FC = () => {
           </div>
 
           {/* Right Column: Dynamic SVG / HTML5 Plot */}
-          <div className="lg:col-span-3 bg-obsidian-950 border border-obsidian-800 rounded-2xl p-4 sm:p-6 flex flex-col justify-between shadow-2xl relative">
+          <div className="lg:col-span-3 bg-obsidian-950 border border-obsidian-800 rounded-2xl p-4 sm:p-6 flex flex-col justify-between shadow-2xl relative reticle-box">
             
-            {/* Plot Top Info */}
-            <div className="flex justify-between items-center text-xs font-mono border-b border-obsidian-800 pb-3 mb-3 text-slate-400">
+            {/* Plot Top Info & Pinned Hover HUD (Prevents Flickering) */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs font-mono border-b border-obsidian-800 pb-3 mb-3 text-slate-400 gap-2">
               <div>
-                Plotted: <strong className="text-white">{activeScatterData.length}</strong> sources (
-                {activeScatterData.length < Object.values(selectedSources).filter(Boolean).length
-                  ? 'some lack valid values for selected axes'
-                  : 'all selected sources plotted'}
-                )
+                Plotted: <strong className="text-white">{activeScatterData.length}</strong> sources
               </div>
-              <div className="text-[11px] text-amber-400">
-                Click any point to inspect source
+              
+              {/* Stable Hover Telemetry Badge */}
+              <div className="h-6 flex items-center">
+                {hoveredScatterPoint ? (
+                  <div className="flex items-center space-x-2 text-[11px] bg-obsidian-900 border border-[#9F80F8]/50 px-3 py-1 rounded-full text-white">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#9F80F8] animate-pulse"></span>
+                    <strong className="text-[#C4B2FB]">{hoveredScatterPoint.rrat.source_name}</strong>
+                    <span className="text-slate-400">X: {hoveredScatterPoint.xVal.toFixed(2)}</span>
+                    <span className="text-slate-400">Y: {hoveredScatterPoint.yVal.toFixed(2)}</span>
+                  </div>
+                ) : (
+                  <span className="text-[11px] text-slate-500">
+                    Hover over data points to inspect • Click to open details
+                  </span>
+                )}
               </div>
             </div>
 
@@ -811,22 +821,23 @@ export const VisualisationsPage: React.FC = () => {
                   {plotBounds.maxY.toFixed(1)}
                 </text>
 
-                {/* Data Points */}
+                {/* Data Points (Stabilized with generous hit area to prevent flickering) */}
                 {activeScatterData.map(({ rrat, x, y }) => {
                   const { cx, cy } = getCanvasCoords(x, y, 700, 480);
                   const dm = rrat.properties.best_dm_pc_cm3 ?? rrat.discovery_info.detection_dm_pc_cm3 ?? 20;
+                  const isHovered = hoveredScatterPoint?.rrat.source_name === rrat.source_name;
 
                   let fillColor = '#00f0ff';
                   if (dm < 20) fillColor = '#10b981';
                   else if (dm > 500) fillColor = '#f43f5e';
-                  else if (dm > 80) fillColor = '#f59e0b';
+                  else if (dm > 80) fillColor = '#9F80F8';
 
                   return (
                     <g
                       key={rrat.source_name}
-                      className="cursor-pointer transition-transform group"
+                      className="cursor-pointer"
                       onClick={() => setSelectedRratForModal(rrat)}
-                      onMouseEnter={(e) => {
+                      onMouseEnter={() => {
                         setHoveredScatterPoint({
                           rrat,
                           xVal: x,
@@ -835,25 +846,32 @@ export const VisualisationsPage: React.FC = () => {
                           posY: cy,
                         });
                       }}
-                      onMouseLeave={() => setHoveredScatterPoint(null)}
+                      onMouseLeave={() => {
+                        setHoveredScatterPoint((prev) => 
+                          prev?.rrat.source_name === rrat.source_name ? null : prev
+                        );
+                      }}
                     >
+                      {/* Invisible stable hit-target */}
+                      <circle cx={cx} cy={cy} r="14" fill="transparent" />
+
+                      {/* Visible Star Point */}
                       <circle
                         cx={cx}
                         cy={cy}
-                        r="6"
+                        r={isHovered ? 8 : 5.5}
                         fill={fillColor}
-                        fillOpacity="0.85"
-                        stroke="#ffffff"
-                        strokeWidth="1.5"
-                        className="hover:scale-150 transition-all hover:stroke-amber-400"
+                        fillOpacity={isHovered ? 1 : 0.85}
+                        stroke={isHovered ? '#ffffff' : '#141822'}
+                        strokeWidth={isHovered ? 2.5 : 1.2}
                       />
                       <text
                         x={cx + 8}
                         y={cy + 3}
-                        fill="#cbd5e1"
+                        fill={isHovered ? '#ffffff' : '#94a3b8'}
                         fontSize="9"
                         fontFamily="monospace"
-                        className="opacity-70 group-hover:opacity-100 pointer-events-none"
+                        className="pointer-events-none font-medium"
                       >
                         {rrat.source_name}
                       </text>
@@ -861,27 +879,6 @@ export const VisualisationsPage: React.FC = () => {
                   );
                 })}
               </svg>
-
-              {/* Hover Floating Tooltip */}
-              {hoveredScatterPoint && (
-                <div
-                  className="absolute pointer-events-none z-30 bg-obsidian-950/95 border border-amber-500/60 p-2.5 rounded-lg text-xs font-mono shadow-2xl backdrop-blur"
-                  style={{
-                    left: `${Math.min(500, Math.max(70, hoveredScatterPoint.posX - 60))}px`,
-                    top: `${Math.max(10, hoveredScatterPoint.posY - 60)}px`,
-                  }}
-                >
-                  <div className="font-bold text-amber-400">
-                    {hoveredScatterPoint.rrat.source_name}
-                  </div>
-                  <div className="text-[10px] text-slate-300">
-                    X: {hoveredScatterPoint.xVal.toFixed(3)}
-                  </div>
-                  <div className="text-[10px] text-slate-300">
-                    Y: {hoveredScatterPoint.yVal.toFixed(3)}
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Bottom Legend */}
@@ -896,12 +893,12 @@ export const VisualisationsPage: React.FC = () => {
                   <span>Intermediate</span>
                 </span>
                 <span className="flex items-center space-x-1">
-                  <span className="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
-                  <span>High-DM</span>
+                  <span className="w-2 h-2 rounded-full bg-[#9F80F8] inline-block"></span>
+                  <span>High-DM (&gt;80)</span>
                 </span>
                 <span className="flex items-center space-x-1">
                   <span className="w-2 h-2 rounded-full bg-rose-500 inline-block"></span>
-                  <span>Extreme</span>
+                  <span>Extreme (&gt;500)</span>
                 </span>
               </div>
 
