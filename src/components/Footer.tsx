@@ -1,6 +1,7 @@
 import React from 'react';
 import { ExternalLink, Radio, Globe, BookOpen, LineChart, Cpu, Database } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logoImg from '../assets/logo.png';
 
 export const Footer: React.FC = () => {
   return (
@@ -10,10 +11,12 @@ export const Footer: React.FC = () => {
           
           {/* Col 1: Overview */}
           <div className="md:col-span-2 space-y-3 font-sans">
-            <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 rounded-md bg-obsidian-900 border border-amber-500/40 flex items-center justify-center text-amber-400">
-                <Radio className="w-3.5 h-3.5" />
-              </div>
+            <div className="flex items-center space-x-2.5">
+              <img
+                src={logoImg}
+                alt="CRACO RRATs Logo"
+                className="w-7 h-7 rounded-full border border-purple-500/40 object-cover"
+              />
               <span className="font-bold text-white text-sm font-mono tracking-tight">CRACO RRATs Survey</span>
             </div>
             <p className="text-slate-400 text-xs leading-relaxed max-w-lg font-light">

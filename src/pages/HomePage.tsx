@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Database, LineChart, Cpu, ArrowRight, Radio, Compass, Zap, Layers, Sparkles, ExternalLink } from 'lucide-react';
 import { INITIAL_RRATS_DATA, getSummaryStats } from '../data/rratsData';
+import logoImg from '../assets/logo.png';
 
 export const HomePage: React.FC = () => {
   const stats = getSummaryStats(INITIAL_RRATS_DATA);
@@ -13,6 +14,18 @@ export const HomePage: React.FC = () => {
       <section className="relative pt-12 pb-14 border-b border-obsidian-800 bg-gradient-to-b from-obsidian-900/80 to-obsidian-950">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           
+          {/* Official Mission Emblem */}
+          <div className="flex justify-center mb-1">
+            <div className="relative group">
+              <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-purple-600 via-amber-500 to-cyan-500 opacity-30 group-hover:opacity-60 blur-lg transition duration-500"></div>
+              <img
+                src={logoImg}
+                alt="CRACO RRATs Mission Patch"
+                className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover shadow-2xl border-2 border-purple-500/40 group-hover:scale-105 transition-transform"
+              />
+            </div>
+          </div>
+
           {/* Telemetry Status Pill */}
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-obsidian-900 border border-amber-500/30 text-amber-300 text-xs font-mono tracking-wider shadow-[0_0_15px_rgba(245,158,11,0.15)]">
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>

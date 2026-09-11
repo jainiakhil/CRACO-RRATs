@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Radio, Database, BookOpen, Info, Github, Menu, X, ExternalLink, LineChart, Globe, Cpu } from 'lucide-react';
+import logoImg from '../assets/logo.png';
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -45,11 +46,13 @@ export const Navbar: React.FC = () => {
           
           {/* Brand Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-8 h-8 rounded-lg bg-obsidian-900 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:border-amber-400 group-hover:shadow-[0_0_12px_rgba(245,158,11,0.25)] transition-all">
-              <Radio className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
-            </div>
+            <img
+              src={logoImg}
+              alt="CRACO RRATs Logo"
+              className="w-9 h-9 rounded-full border border-purple-500/40 group-hover:border-amber-400 group-hover:shadow-[0_0_14px_rgba(168,85,247,0.4)] transition-all object-cover"
+            />
             <div>
-              <span className="text-base font-bold font-mono tracking-tight text-white flex items-center space-x-1">
+              <span className="text-base font-bold font-mono tracking-tight text-white flex items-center space-x-1.5">
                 <span>CRACO</span>
                 <span className="text-amber-400 font-extrabold">RRATs</span>
               </span>
