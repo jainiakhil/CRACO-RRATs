@@ -35,7 +35,7 @@ export const Navbar: React.FC = () => {
           <span className="hidden sm:inline text-slate-500">MRO 26°42′15″S 116°40′17″E</span>
         </div>
         <div className="flex items-center space-x-3 font-mono">
-          <span className="text-amber-400">37 DISCOVERIES</span>
+          <span className="text-[#9F80F8]">37 DISCOVERIES</span>
           <span className="text-obsidian-600">|</span>
           <span className="text-slate-500">RES: 3.0 / 13.8 ms</span>
         </div>
@@ -49,12 +49,12 @@ export const Navbar: React.FC = () => {
             <img
               src={logoImg}
               alt="CRACO RRATs Logo"
-              className="w-9 h-9 rounded-full border border-purple-500/40 group-hover:border-amber-400 group-hover:shadow-[0_0_14px_rgba(168,85,247,0.4)] transition-all object-cover"
+              className="w-9 h-9 rounded-full border border-purple-500/40 group-hover:border-[#9F80F8] group-hover:shadow-[0_0_14px_rgba(159,128,248,0.4)] transition-all object-cover"
             />
             <div>
               <span className="text-base font-bold font-mono tracking-tight text-white flex items-center space-x-1.5">
                 <span>CRACO</span>
-                <span className="text-amber-400 font-extrabold">RRATs</span>
+                <span className="text-[#9F80F8] font-extrabold">RRATs</span>
               </span>
             </div>
           </Link>
@@ -70,11 +70,11 @@ export const Navbar: React.FC = () => {
                   to={link.path}
                   className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md transition-all ${
                     active
-                      ? 'bg-obsidian-850 text-amber-400 border border-amber-500/40 shadow-sm shadow-amber-500/10 font-semibold'
+                      ? 'bg-obsidian-850 text-[#9F80F8] border border-[#9F80F8]/40 shadow-sm shadow-[#9F80F8]/10 font-semibold'
                       : 'text-slate-400 hover:text-white hover:bg-obsidian-850/60'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${active ? 'text-amber-400' : 'text-slate-500'}`} />
+                  <Icon className={`w-3.5 h-3.5 ${active ? 'text-[#9F80F8]' : 'text-slate-500'}`} />
                   <span>{link.name}</span>
                 </Link>
               );
@@ -88,7 +88,7 @@ export const Navbar: React.FC = () => {
               href="https://github.com/jainiakhil/CRACO-RRATs"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-1.5 text-xs font-mono text-slate-400 hover:text-amber-300 transition-colors py-1 px-2 rounded-md hover:bg-obsidian-850 border border-transparent hover:border-obsidian-750"
+              className="flex items-center space-x-1.5 text-xs font-mono text-slate-400 hover:text-[#C4B2FB] transition-colors py-1 px-2 rounded-md hover:bg-obsidian-850 border border-transparent hover:border-obsidian-750"
               title="GitHub Repository"
             >
               <Github className="w-3.5 h-3.5" />
@@ -123,7 +123,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg ${
                   active
-                    ? 'bg-obsidian-850 text-amber-400 border border-amber-500/40'
+                    ? 'bg-obsidian-850 text-[#9F80F8] border border-[#9F80F8]/40'
                     : 'text-slate-300 hover:text-white hover:bg-obsidian-850/50'
                 }`}
               >
@@ -137,7 +137,7 @@ export const Navbar: React.FC = () => {
               href="https://github.com/jainiakhil/CRACO-RRATs"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 px-3 py-2 text-xs text-slate-400 hover:text-amber-300"
+              className="flex items-center space-x-2 px-3 py-2 text-xs text-slate-400 hover:text-[#C4B2FB]"
             >
               <Github className="w-4 h-4" />
               <span>View on GitHub</span>

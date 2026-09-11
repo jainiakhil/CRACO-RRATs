@@ -31,25 +31,25 @@ export const Footer: React.FC = () => {
 
           {/* Col 2: Navigation */}
           <div>
-            <h4 className="text-white font-semibold text-xs mb-3 uppercase tracking-wider text-amber-400">Observatory</h4>
+            <h4 className="font-semibold text-xs mb-3 uppercase tracking-wider text-[#9F80F8]">Observatory</h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link to="/project" className="hover:text-amber-400 transition-colors">
+                <Link to="/project" className="hover:text-[#9F80F8] transition-colors">
                   The Science Project
                 </Link>
               </li>
               <li>
-                <Link to="/data-release" className="hover:text-amber-400 transition-colors">
-                  Data Release Catalog
+                <Link to="/data-release" className="hover:text-[#9F80F8] transition-colors">
+                  Data Release Catalogue
                 </Link>
               </li>
               <li>
-                <Link to="/visualisations" className="hover:text-amber-400 transition-colors">
+                <Link to="/visualisations" className="hover:text-[#9F80F8] transition-colors">
                   3D Orbit &amp; Visualisations
                 </Link>
               </li>
               <li>
-                <Link to="/publications" className="hover:text-amber-400 transition-colors">
+                <Link to="/publications" className="hover:text-[#9F80F8] transition-colors">
                   Publications &amp; Preprints
                 </Link>
               </li>
@@ -58,14 +58,14 @@ export const Footer: React.FC = () => {
 
           {/* Col 3: Facilities */}
           <div>
-            <h4 className="text-white font-semibold text-xs mb-3 uppercase tracking-wider text-amber-400">Facilities</h4>
+            <h4 className="font-semibold text-xs mb-3 uppercase tracking-wider text-[#9F80F8]">Facilities</h4>
             <ul className="space-y-2 text-xs">
               <li>
                 <a
                   href="https://www.csiro.au/en/research/technology-space/astronomy-and-space-exploration/askap"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-1 hover:text-amber-400 transition-colors"
+                  className="flex items-center space-x-1 hover:text-[#9F80F8] transition-colors"
                 >
                   <span>CSIRO ASKAP Array</span>
                   <ExternalLink className="w-3 h-3 opacity-60" />
@@ -76,7 +76,7 @@ export const Footer: React.FC = () => {
                   href="https://www.parkes.atnf.csiro.au/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-1 hover:text-amber-400 transition-colors"
+                  className="flex items-center space-x-1 hover:text-[#9F80F8] transition-colors"
                 >
                   <span>Murriyang (Parkes 64m)</span>
                   <ExternalLink className="w-3 h-3 opacity-60" />
@@ -87,7 +87,7 @@ export const Footer: React.FC = () => {
                   href="https://data.csiro.au/domain/casda"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-1 hover:text-amber-400 transition-colors"
+                  className="flex items-center space-x-1 hover:text-[#9F80F8] transition-colors"
                 >
                   <span>CASDA Archive</span>
                   <ExternalLink className="w-3 h-3 opacity-60" />
@@ -98,7 +98,7 @@ export const Footer: React.FC = () => {
                   href="https://rratalog.github.io/rratalog/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-1 hover:text-amber-400 transition-colors"
+                  className="flex items-center space-x-1 hover:text-[#9F80F8] transition-colors"
                 >
                   <span>RRATalog Database</span>
                   <ExternalLink className="w-3 h-3 opacity-60" />
@@ -118,7 +118,7 @@ export const Footer: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-between items-center pt-4 text-slate-500 text-[11px]">
             <p>© {new Date().getFullYear()} CRACO Team &amp; Centre for Astrophysics and Supercomputing, Swinburne University.</p>
             <p className="mt-2 sm:mt-0 text-slate-400">
-              Curated by Akhil Jaini (<a href="mailto:ajaini@swin.edu.au" className="hover:text-amber-400 underline">ajaini@swin.edu.au</a>)
+              Curated by Akhil Jaini (<a href="mailto:ajaini@swin.edu.au" className="hover:text-[#9F80F8] underline">ajaini@swin.edu.au</a>)
             </p>
           </div>
         </div>

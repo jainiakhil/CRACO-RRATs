@@ -113,7 +113,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <button
               onClick={onExportCsv}
               className="flex items-center space-x-1 px-3 py-2 rounded-xl text-xs font-medium bg-obsidian-850 hover:bg-obsidian-800 text-slate-200 border border-obsidian-750 transition"
-              title="Download Filtered Catalog as CSV"
+              title="Download Filtered Catalogue as CSV"
             >
               <Download className="w-3.5 h-3.5 text-cyan-400" />
               <span>CSV</span>
@@ -121,7 +121,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <button
               onClick={onExportJson}
               className="flex items-center space-x-1 px-3 py-2 rounded-xl text-xs font-medium bg-obsidian-850 hover:bg-obsidian-800 text-slate-200 border border-obsidian-750 transition"
-              title="Download Filtered Catalog as JSON"
+              title="Download Filtered Catalogue as JSON"
             >
               <Download className="w-3.5 h-3.5 text-[#9F80F8]" />
               <span>JSON</span>
@@ -138,7 +138,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             <button
               onClick={() => fileInputRef.current?.click()}
               className="flex items-center space-x-1 px-3 py-2 rounded-xl text-xs font-medium bg-violet-950/70 hover:bg-violet-900/80 text-[#C4B2FB] border border-[#9F80F8]/40 transition"
-              title="Import local JSON file to catalog (e.g. mockdata_test.json)"
+              title="Import local JSON file to catalogue (e.g. mockdata_test.json)"
             >
               <Upload className="w-3.5 h-3.5" />
               <span>Import JSON</span>

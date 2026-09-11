@@ -12,7 +12,7 @@ import { AboutPage } from './pages/AboutPage';
 export const App: React.FC = () => {
   return (
     <HashRouter>
-      <div className="flex flex-col min-h-screen bg-obsidian-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200 font-sans">
+      <div className="flex flex-col min-h-screen bg-obsidian-950 text-slate-100 selection:bg-[#9F80F8]/30 selection:text-[#C4B2FB] font-sans">
         <Navbar />
         <main className="flex-grow">
           <Routes>

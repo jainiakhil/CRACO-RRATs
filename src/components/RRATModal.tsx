@@ -59,17 +59,17 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 overflow-y-auto animate-fadeIn"
+      className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto animate-fadeIn"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-obsidian-900 border border-obsidian-750 rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden reticle-box">
+      <div className="bg-[#090b10] border border-obsidian-750 rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden reticle-box">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-obsidian-800 bg-obsidian-950/80">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-obsidian-800 bg-[#050608]">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-lg bg-violet-950/80 border border-[#9F80F8]/40 flex items-center justify-center text-[#9F80F8]">
+            <div className="w-9 h-9 rounded-lg bg-[#170B3D] border border-[#9F80F8]/40 flex items-center justify-center text-[#9F80F8]">
               <Radio className="w-5 h-5" />
             </div>
             <div>
@@ -77,10 +77,10 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
                 <h2 className="text-xl sm:text-2xl font-bold text-white font-mono tracking-tight">
                   {rrat.source_name}
                 </h2>
-                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-cyan-950/70 text-cyan-300 border border-cyan-500/30 font-mono">
+                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#08202e] text-cyan-300 border border-cyan-500/30 font-mono">
                   S/N {rrat.discovery_info.detection_snr ?? 'N/A'}
                 </span>
-                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-violet-950/70 text-[#C4B2FB] border border-[#9F80F8]/40 font-mono">
+                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#170B3D] text-[#C4B2FB] border border-[#9F80F8]/40 font-mono">
                   DM {rrat.discovery_info.detection_dm_pc_cm3 ?? 'N/A'}
                 </span>
               </div>
@@ -110,7 +110,7 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex px-6 pt-2 border-b border-obsidian-800 bg-obsidian-950/50 text-sm overflow-x-auto font-mono">
+        <div className="flex px-6 pt-2 border-b border-obsidian-800 bg-[#050608] text-sm overflow-x-auto font-mono">
           <button
             onClick={() => setActiveTab('overview')}
             className={`pb-2.5 px-3 font-medium transition-colors border-b-2 flex items-center space-x-1.5 whitespace-nowrap ${
@@ -167,7 +167,7 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 
                 {/* Discovery Parameters Card */}
-                <div className="bg-obsidian-850/80 border border-obsidian-800 rounded-xl p-4 space-y-3">
+                <div className="bg-obsidian-850 border border-obsidian-800 rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between border-b border-obsidian-800 pb-2">
                     <div className="flex items-center space-x-2 text-[#9F80F8] font-semibold text-sm font-mono">
                       <Sparkles className="w-4 h-4" />
@@ -225,7 +225,7 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
                 </div>
 
                 {/* Astrometric & Physical Properties Card */}
-                <div className="bg-obsidian-850/80 border border-obsidian-800 rounded-xl p-4 space-y-3">
+                <div className="bg-obsidian-850 border border-obsidian-800 rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between border-b border-obsidian-800 pb-2">
                     <div className="flex items-center space-x-2 text-[#9F80F8] font-semibold text-sm font-mono">
                       <Compass className="w-4 h-4" />
@@ -283,7 +283,7 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
               </div>
 
               {/* Distance Estimates Panel */}
-              <div className="bg-obsidian-850/60 border border-obsidian-800 rounded-xl p-4">
+              <div className="bg-obsidian-850 border border-obsidian-800 rounded-xl p-4">
                 <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider font-mono mb-3">
                   // Galactic Electron Density Distance Estimates (kpc)
                 </h4>
@@ -331,7 +331,7 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
           {/* TAB 2: DYNAMIC SPECTRA (FULL VIEW) */}
           {activeTab === 'spectra' && (
             <div className="space-y-4">
-              <div className="bg-obsidian-850/70 p-4 rounded-xl border border-obsidian-800 text-xs text-slate-300 leading-relaxed font-sans">
+              <div className="bg-obsidian-850 p-4 rounded-xl border border-obsidian-800 text-xs text-slate-300 leading-relaxed font-sans">
                 <p>
                   <strong className="text-white">About this dynamic spectrum:</strong> Dynamic spectra (waterfall plots) represent received 
                   flux intensity across frequency channels over time. The CRACO image-plane pipeline recovers 
@@ -347,7 +347,7 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
           {/* TAB 3: ADDITIONAL INFO & LINKS */}
           {activeTab === 'additional' && (
             <div className="space-y-6">
-              <div className="bg-obsidian-850/80 border border-obsidian-800 rounded-xl p-5 space-y-4">
+              <div className="bg-obsidian-850 border border-obsidian-800 rounded-xl p-5 space-y-4">
                 <div className="flex items-center space-x-2 text-[#9F80F8] font-semibold text-sm border-b border-obsidian-800 pb-2 font-mono">
                   <Layers className="w-4 h-4" />
                   <span>Observation Metadata & Survey Link</span>
@@ -404,7 +404,7 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
                 </div>
 
                 {/* External Link Section */}
-                <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-violet-950/40 via-obsidian-900 to-obsidian-950 border border-[#9F80F8]/30">
+                <div className="mt-4 p-4 rounded-xl bg-obsidian-950 border border-[#9F80F8]/30">
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
                       <div className="flex items-center space-x-2">
@@ -459,7 +459,7 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
                   </button>
                   <button
                     onClick={handleDownloadJson}
-                    className="flex items-center space-x-1 px-2.5 py-1 rounded bg-violet-950/70 hover:bg-violet-900/80 text-[#C4B2FB] border border-[#9F80F8]/40 text-xs transition"
+                    className="flex items-center space-x-1 px-2.5 py-1 rounded bg-violet-950 hover:bg-violet-900 text-[#C4B2FB] border border-[#9F80F8]/40 text-xs transition"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Download File</span>
@@ -475,7 +475,7 @@ export const RRATModal: React.FC<RRATModalProps> = ({ rrat, onClose }) => {
         </div>
 
         {/* Modal Footer */}
-        <div className="px-6 py-3 border-t border-obsidian-800 bg-obsidian-950/90 flex flex-wrap justify-between items-center text-xs text-slate-400 font-mono">
+        <div className="px-6 py-3 border-t border-obsidian-800 bg-[#050608] flex flex-wrap justify-between items-center text-xs text-slate-400 font-mono">
           <div className="flex items-center space-x-2">
             <span>Cite as:</span>
             <span className="text-slate-300">Jaini et al. (2026), MNRAS</span>

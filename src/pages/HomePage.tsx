@@ -17,7 +17,7 @@ export const HomePage: React.FC = () => {
           {/* Official Mission Emblem */}
           <div className="flex justify-center mb-1">
             <div className="relative group">
-              <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-purple-600 via-amber-500 to-cyan-500 opacity-30 group-hover:opacity-60 blur-lg transition duration-500"></div>
+              <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-[#6C3DF2] via-[#9F80F8] to-cyan-400 opacity-30 group-hover:opacity-60 blur-lg transition duration-500"></div>
               <img
                 src={logoImg}
                 alt="CRACO RRATs Mission Patch"
@@ -27,14 +27,14 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Telemetry Status Pill */}
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-obsidian-900 border border-amber-500/30 text-amber-300 text-xs font-mono tracking-wider shadow-[0_0_15px_rgba(245,158,11,0.15)]">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-obsidian-900 border border-[#9F80F8]/40 text-[#C4B2FB] text-xs font-mono tracking-wider shadow-[0_0_15px_rgba(159,128,248,0.25)]">
+            <span className="w-2 h-2 rounded-full bg-[#9F80F8] animate-pulse"></span>
             <span>ASKAP CRACO FAST TRANSIENT ARCHIVE</span>
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-6xl font-extrabold font-sans tracking-tight text-white leading-tight">
-            Unveiling the <span className="bg-gradient-to-r from-amber-400 via-amber-200 to-amber-500 bg-clip-text text-transparent">De-Biased Galactic</span> RRAT Population
+            Unveiling the <span className="bg-gradient-to-r from-[#C4B2FB] via-[#9F80F8] to-[#845EF6] bg-clip-text text-transparent">De-Biased Galactic</span> RRAT Population
           </h1>
 
           {/* Concise Subtitle */}
@@ -47,7 +47,7 @@ export const HomePage: React.FC = () => {
           <div className="flex flex-wrap justify-center items-center gap-3 pt-2 font-mono text-xs">
             <Link
               to="/data-release"
-              className="inline-flex items-center space-x-2 px-5 py-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-obsidian-950 font-bold tracking-wide transition shadow-lg shadow-amber-500/20"
+              className="inline-flex items-center space-x-2 px-5 py-3 rounded-lg bg-[#9F80F8] hover:bg-[#845EF6] text-obsidian-950 font-bold tracking-wide transition shadow-lg shadow-[#9F80F8]/25"
             >
               <Database className="w-4 h-4" />
               <span>EXPLORE DATA RELEASE</span>
@@ -56,9 +56,9 @@ export const HomePage: React.FC = () => {
 
             <Link
               to="/visualisations"
-              className="inline-flex items-center space-x-2 px-5 py-3 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 text-amber-300 border border-amber-500/40 transition"
+              className="inline-flex items-center space-x-2 px-5 py-3 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 text-[#C4B2FB] border border-[#9F80F8]/40 transition"
             >
-              <LineChart className="w-4 h-4 text-amber-400" />
+              <LineChart className="w-4 h-4 text-[#9F80F8]" />
               <span>3D ORBIT & PLOTS</span>
             </Link>
 
@@ -80,7 +80,7 @@ export const HomePage: React.FC = () => {
               <span className="text-3xl font-extrabold font-mono text-white">
                 {stats.total}
               </span>
-              <span className="text-[10px] text-amber-400 font-mono block mt-1">Confirmed RRATs</span>
+              <span className="text-[10px] text-[#9F80F8] font-mono block mt-1">Confirmed RRATs</span>
             </div>
 
             <div className="reticle-box bg-obsidian-900/90 border border-obsidian-800 p-4 rounded-xl text-left">
@@ -97,7 +97,7 @@ export const HomePage: React.FC = () => {
               <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-1">
                 // HIGHEST RECORDED DM
               </span>
-              <span className="text-3xl font-extrabold font-mono text-amber-400">
+              <span className="text-3xl font-extrabold font-mono text-[#9F80F8]">
                 {stats.maxDm.toFixed(1)}
               </span>
               <span className="text-[10px] text-slate-400 font-mono block mt-1">pc cm⁻³ (J1743−2754)</span>
@@ -120,7 +120,7 @@ export const HomePage: React.FC = () => {
       {/* THREE STRATEGIC PILLARS */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="flex items-center justify-between border-b border-obsidian-800 pb-2">
-          <span className="text-xs font-mono uppercase tracking-wider text-amber-400 flex items-center space-x-1.5">
+          <span className="text-xs font-mono uppercase tracking-wider text-[#9F80F8] flex items-center space-x-1.5">
             <Radio className="w-3.5 h-3.5" />
             <span>OBSERVATORY PORTALS</span>
           </span>
@@ -132,22 +132,22 @@ export const HomePage: React.FC = () => {
           {/* Gateway 1: Data Release */}
           <Link
             to="/data-release"
-            className="group reticle-box bg-obsidian-900/70 hover:bg-obsidian-850 border border-obsidian-800 hover:border-amber-500/40 p-6 rounded-2xl transition duration-300 flex flex-col justify-between"
+            className="group reticle-box bg-obsidian-900/70 hover:bg-obsidian-850 border border-obsidian-800 hover:border-[#9F80F8]/40 p-6 rounded-2xl transition duration-300 flex flex-col justify-between"
           >
             <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-violet-950/60 border border-[#9F80F8]/40 flex items-center justify-center text-[#9F80F8] group-hover:scale-105 transition-transform">
                 <Database className="w-5 h-5" />
               </div>
-              <h2 className="text-lg font-bold text-white font-mono group-hover:text-amber-300 transition-colors">
-                Data Release Catalog
+              <h2 className="text-lg font-bold text-white font-mono group-hover:text-[#C4B2FB] transition-colors">
+                Data Release Catalogue
               </h2>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Browse all 37 CRACO discoveries. Inspect discovery parameters, multi-model distance estimates (NE2001, NE2025, YMW16), 
                 and dynamic spectra waterfall plots.
               </p>
             </div>
-            <div className="pt-4 flex items-center text-xs font-mono text-amber-400 group-hover:translate-x-1 transition-transform">
-              <span>View Source Catalog</span>
+            <div className="pt-4 flex items-center text-xs font-mono text-[#9F80F8] group-hover:translate-x-1 transition-transform">
+              <span>View Source Catalogue</span>
               <ArrowRight className="w-3.5 h-3.5 ml-1" />
             </div>
           </Link>
@@ -165,7 +165,7 @@ export const HomePage: React.FC = () => {
                 Interactive Visualisations
               </h2>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Rotate a 3D celestial sphere around Earth showing 3D space positions, or plot any pair of physical properties in real-time with customizable X-Y axes.
+                Rotate a 3D celestial sphere around Earth showing 3D space positions, or plot any pair of physical properties in real-time with customisable X-Y axes.
               </p>
             </div>
             <div className="pt-4 flex items-center text-xs font-mono text-cyan-400 group-hover:translate-x-1 transition-transform">
@@ -205,7 +205,7 @@ export const HomePage: React.FC = () => {
           <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
             // SPOTLIGHT DISCOVERIES
           </span>
-          <span className="text-[11px] font-mono text-amber-400">KEY TRANSIENTS</span>
+          <span className="text-[11px] font-mono text-[#9F80F8]">KEY TRANSIENTS</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
@@ -229,8 +229,8 @@ export const HomePage: React.FC = () => {
           {/* Extreme 2: J1743-2754 */}
           <div className="p-4 bg-obsidian-900 border border-obsidian-800 rounded-xl space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm font-bold text-amber-300">J1743−2754</span>
-              <span className="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-500/30 text-[10px]">
+              <span className="text-sm font-bold text-[#C4B2FB]">J1743−2754</span>
+              <span className="px-2 py-0.5 rounded bg-violet-950 text-[#C4B2FB] border border-[#9F80F8]/40 text-[10px]">
                 HIGHEST RRAT DM: 1011.9 pc cm⁻³
               </span>
             </div>

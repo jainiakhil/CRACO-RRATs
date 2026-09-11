@@ -287,7 +287,7 @@ export const DynamicSpectraViewer: React.FC<DynamicSpectraViewerProps> = ({ rrat
             onChange={(e) => setColormap(e.target.value as ColormapName)}
             style={{ backgroundColor: '#090b10', color: '#f1f5f9' }}
             className="bg-[#090b10] text-slate-200 border border-obsidian-750 rounded px-2 py-1 text-xs focus:outline-none focus:border-[#9F80F8]"
-            title="Color Palette"
+            title="Colour Palette"
           >
             <option value="inferno" style={{ backgroundColor: '#0e1118', color: '#ffffff' }}>Inferno</option>
             <option value="viridis" style={{ backgroundColor: '#0e1118', color: '#ffffff' }}>Viridis</option>
@@ -330,7 +330,7 @@ export const DynamicSpectraViewer: React.FC<DynamicSpectraViewerProps> = ({ rrat
       {/* Caption & Metadata */}
       <div className="mt-2 text-[11px] text-slate-400 flex flex-wrap justify-between items-center px-1 font-mono">
         <span>
-          BW: <strong className="text-slate-300">{bandwidth} MHz</strong> ({centerFreq.toFixed(1)} MHz center)
+          BW: <strong className="text-slate-300">{bandwidth} MHz</strong> ({centerFreq.toFixed(1)} MHz centre)
         </span>
         <span>
           W₅₀: <strong className="text-slate-300">{widthMs.toFixed(1)} ms</strong>

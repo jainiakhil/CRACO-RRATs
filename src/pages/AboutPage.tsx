@@ -40,11 +40,11 @@ export const AboutPage: React.FC = () => {
           <ul className="space-y-2.5 text-xs text-slate-300">
             <li className="flex items-start space-x-2">
               <span className="text-[#9F80F8] font-bold">•</span>
-              <span><strong>Array Geometry:</strong> 36 identical 12-meter parabolic antennas with baselines spanning up to 6 kilometers.</span>
+              <span><strong>Array Geometry:</strong> 36 identical 12-metre parabolic antennas with baselines spanning up to 6 kilometres.</span>
             </li>
             <li className="flex items-start space-x-2">
               <span className="text-[#9F80F8] font-bold">•</span>
-              <span><strong>Phased Array Feeds (PAFs):</strong> 188-element chequerboard feeds forming up to 36 digital dual-polarization beams.</span>
+              <span><strong>Phased Array Feeds (PAFs):</strong> 188-element chequerboard feeds forming up to 36 digital dual-polarisation beams.</span>
             </li>
             <li className="flex items-start space-x-2">
               <span className="text-[#9F80F8] font-bold">•</span>

@@ -107,7 +107,7 @@ export const DataReleasePage: React.FC = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `craco_rrats_catalog_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute("download", `craco_rrats_catalogue_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -118,7 +118,7 @@ export const DataReleasePage: React.FC = () => {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(filteredRrats, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `craco_rrats_catalog_${new Date().toISOString().split('T')[0]}.json`);
+    downloadAnchor.setAttribute("download", `craco_rrats_catalogue_${new Date().toISOString().split('T')[0]}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -133,7 +133,7 @@ export const DataReleasePage: React.FC = () => {
       setImportNotification(`Updated entry for ${newRrat.source_name}`);
     } else {
       setRrats(prev => [newRrat, ...prev]);
-      setImportNotification(`Successfully added ${newRrat.source_name} to the active catalog`);
+      setImportNotification(`Successfully added ${newRrat.source_name} to the active catalogue`);
     }
 
     // Auto-open imported source
@@ -153,10 +153,10 @@ export const DataReleasePage: React.FC = () => {
           <div>
             <div className="flex items-center space-x-2 text-[#9F80F8] font-mono text-xs uppercase tracking-wider mb-1">
               <Database className="w-4 h-4 text-[#9F80F8]" />
-              <span>ASKAP CRACO Data Release // Catalog</span>
+              <span>ASKAP CRACO Data Release // Catalogue</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-sans">
-              Rotating Radio Transients Catalog
+              Rotating Radio Transients Catalogue
             </h1>
             <p className="text-slate-300 text-sm mt-1 max-w-2xl font-light leading-relaxed">
               Coherently detected single-pulse transients from the ASKAP CRACO image-plane pipeline, 

@@ -8,9 +8,9 @@ export const ProjectPage: React.FC = () => {
       
       {/* Page Header */}
       <div className="bg-obsidian-900 border border-obsidian-800 rounded-2xl p-6 sm:p-10 space-y-3 reticle-box">
-        <div className="flex items-center space-x-2 text-amber-400 font-mono text-xs uppercase tracking-wider">
-          <Cpu className="w-4 h-4" />
-          <span>Scientific Mission & System Architecture</span>
+        <div className="flex items-center space-x-2 text-[#9F80F8] font-mono text-xs uppercase tracking-wider">
+          <Cpu className="w-4 h-4 text-[#9F80F8]" />
+          <span>Scientific Mission &amp; System Architecture</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-sans">
           The CRACO RRATs Project
@@ -24,7 +24,7 @@ export const ProjectPage: React.FC = () => {
 
       {/* SECTION 1: What is an RRAT? */}
       <section className="space-y-4">
-        <div className="flex items-center space-x-2 text-xs font-mono text-amber-400 uppercase tracking-wider border-b border-obsidian-800 pb-2">
+        <div className="flex items-center space-x-2 text-xs font-mono text-[#9F80F8] uppercase tracking-wider border-b border-obsidian-800 pb-2">
           <Radio className="w-4 h-4" />
           <span>Section 01 // Astrophysical Nature of RRATs</span>
         </div>
@@ -52,7 +52,7 @@ export const ProjectPage: React.FC = () => {
           </div>
 
           <div className="bg-obsidian-900 border border-obsidian-800 rounded-xl p-4 space-y-2.5 font-mono text-xs">
-            <span className="text-amber-400 font-semibold block text-[11px] uppercase tracking-wider">
+            <span className="text-[#9F80F8] font-semibold block text-[11px] uppercase tracking-wider">
               Key Physical Parameters
             </span>
             <div className="flex justify-between border-b border-obsidian-800 pb-1.5">
@@ -73,7 +73,7 @@ export const ProjectPage: React.FC = () => {
             </div>
             <div className="flex justify-between pt-1">
               <span className="text-slate-400">Evolutionary State:</span>
-              <span className="text-amber-300">Pulsar Deathline</span>
+              <span className="text-[#C4B2FB]">Pulsar Deathline</span>
             </div>
           </div>
         </div>
@@ -83,7 +83,7 @@ export const ProjectPage: React.FC = () => {
       <section className="space-y-4">
         <div className="flex items-center space-x-2 text-xs font-mono text-rose-400 uppercase tracking-wider border-b border-obsidian-800 pb-2">
           <ShieldCheck className="w-4 h-4" />
-          <span>Section 02 // Selection Bias & Low-DM Blindness</span>
+          <span>Section 02 // Selection Bias &amp; Low-DM Blindness</span>
         </div>
         <h2 className="text-2xl font-bold text-white font-sans">
           The Zero-DM Filter Limitation in Single-Dish Surveys
@@ -98,14 +98,14 @@ export const ProjectPage: React.FC = () => {
 
           {/* Mathematical formulation card */}
           <div className="bg-obsidian-900 border border-obsidian-800 p-5 rounded-xl font-mono text-xs space-y-2">
-            <span className="text-amber-400 block text-[11px] uppercase tracking-wider">
+            <span className="text-[#9F80F8] block text-[11px] uppercase tracking-wider">
               Zero-DM Common-Mode Subtraction Filter
             </span>
             <p className="text-slate-300 font-sans">
               To mitigate terrestrial RFI, standard pipelines calculate the band-averaged intensity across all channels 
               and subtract it from each individual channel at time sample $t_j$:
             </p>
-            <div className="p-3 bg-obsidian-950 rounded-lg text-amber-300 overflow-x-auto text-center font-mono my-2 border border-obsidian-800">
+            <div className="p-3 bg-obsidian-950 rounded-lg text-[#C4B2FB] overflow-x-auto text-center font-mono my-2 border border-obsidian-800">
               S'(f_i, t_j) = S(f_i, t_j) - (1 / N_chans) · &Sigma; S(f_k, t_j)
             </div>
             <p className="text-slate-400 font-sans">
@@ -142,7 +142,7 @@ export const ProjectPage: React.FC = () => {
               (13.8 ms and 3 ms modes).
             </p>
             <p>
-              Because terrestrial RFI originates locally in the near-field, it does not phase-cohere across the 6-kilometer 
+              Because terrestrial RFI originates locally in the near-field, it does not phase-cohere across the 6-kilometre 
               physical baselines of the ASKAP array. Local RFI decorrelates and is naturally suppressed during dirty imaging, 
               appearing as diffuse background noise rather than compact point sources.
             </p>
@@ -170,10 +170,10 @@ export const ProjectPage: React.FC = () => {
       <section className="space-y-4">
         <div className="flex items-center space-x-2 text-xs font-mono text-indigo-400 uppercase tracking-wider border-b border-obsidian-800 pb-2">
           <Compass className="w-4 h-4" />
-          <span>Section 04 // Commensal Operations & Murriyang Follow-Up</span>
+          <span>Section 04 // Commensal Operations &amp; Murriyang Follow-Up</span>
         </div>
         <h2 className="text-2xl font-bold text-white font-sans">
-          ASKAP Commensal Breadth & Parkes Medusa Timing
+          ASKAP Commensal Breadth &amp; Parkes Medusa Timing
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-300 leading-relaxed">
@@ -206,7 +206,7 @@ export const ProjectPage: React.FC = () => {
         <div className="flex space-x-3 font-mono text-xs">
           <Link
             to="/data-release"
-            className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-obsidian-950 font-bold transition"
+            className="px-4 py-2 rounded-lg bg-[#9F80F8] hover:bg-[#845EF6] text-obsidian-950 font-bold transition shadow-lg shadow-[#9F80F8]/20"
           >
             Data Release
           </Link>

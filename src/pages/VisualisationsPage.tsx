@@ -124,6 +124,28 @@ export const VisualisationsPage: React.FC = () => {
     posY: number;
   } | null>(null);
 
+  // 2D Plotter Mouse Region Zoom State
+  const [zoomRange, setZoomRange] = useState<{
+    minX: number;
+    maxX: number;
+    minY: number;
+    maxY: number;
+  } | null>(null);
+  const [selectionBox, setSelectionBox] = useState<{
+    startX: number;
+    startY: number;
+    currentX: number;
+    currentY: number;
+  } | null>(null);
+  const [isBoxSelecting, setIsBoxSelecting] = useState<boolean>(false);
+  const svgScatterRef = useRef<SVGSVGElement | null>(null);
+  const hasDraggedRef = useRef<boolean>(false);
+
+  // Reset zoom when axes or log scales change
+  useEffect(() => {
+    setZoomRange(null);
+  }, [xAxis, yAxis, xLog, yLog]);
+
   // --------------------------------------------------------------------------
   // 1. THREE.JS 3D CELESTIAL ORBIT LOGIC
   // --------------------------------------------------------------------------
@@ -371,8 +393,8 @@ export const VisualisationsPage: React.FC = () => {
     });
   }, [xAxis, yAxis, selectedSources]);
 
-  // Min and Max for active scatter data
-  const plotBounds = useMemo(() => {
+  // Min and Max for active scatter data (Default bounds)
+  const basePlotBounds = useMemo(() => {
     if (activeScatterData.length === 0) {
       return { minX: 0, maxX: 10, minY: 0, maxY: 10 };
     }
@@ -384,50 +406,167 @@ export const VisualisationsPage: React.FC = () => {
     let minY = Math.min(...yVals);
     let maxY = Math.max(...yVals);
 
+    if (minX === maxX) {
+      minX = minX * 0.9 || -1;
+      maxX = maxX * 1.1 || 1;
+    }
+    if (minY === maxY) {
+      minY = minY * 0.9 || -1;
+      maxY = maxY * 1.1 || 1;
+    }
+
     // Padding
     const padX = (maxX - minX) * 0.1 || 1;
     const padY = (maxY - minY) * 0.1 || 1;
 
     return {
-      minX: xLog ? minX * 0.8 : minX - padX,
+      minX: xLog ? Math.max(0.0001, minX * 0.8) : minX - padX,
       maxX: xLog ? maxX * 1.2 : maxX + padX,
-      minY: yLog ? minY * 0.8 : minY - padY,
+      minY: yLog ? Math.max(0.0001, minY * 0.8) : minY - padY,
       maxY: yLog ? maxY * 1.2 : maxY + padY,
     };
   }, [activeScatterData, xLog, yLog]);
 
+  // Current effective bounds (zoomed region or base bounds)
+  const effectiveBounds = useMemo(() => {
+    return zoomRange ?? basePlotBounds;
+  }, [zoomRange, basePlotBounds]);
+
+  const padLeft = 65;
+  const padRight = 30;
+  const padTop = 30;
+  const padBottom = 55;
+  const plotW = 700 - padLeft - padRight; // 605
+  const plotH = 480 - padTop - padBottom; // 395
+
   // Coordinate mapper for 2D plot (SVG 700 x 480)
-  const getCanvasCoords = (xVal: number, yVal: number, width = 700, height = 480) => {
-    const padLeft = 65;
-    const padRight = 30;
-    const padTop = 30;
-    const padBottom = 55;
-
-    const plotW = width - padLeft - padRight;
-    const plotH = height - padTop - padBottom;
-
+  const getCanvasCoords = (xVal: number, yVal: number) => {
     let normX = 0;
     let normY = 0;
 
     if (xLog) {
-      const logMin = Math.log10(Math.max(0.0001, plotBounds.minX));
-      const logMax = Math.log10(Math.max(0.0001, plotBounds.maxX));
+      const logMin = Math.log10(Math.max(0.0001, effectiveBounds.minX));
+      const logMax = Math.log10(Math.max(0.0001, effectiveBounds.maxX));
       normX = (Math.log10(Math.max(0.0001, xVal)) - logMin) / (logMax - logMin || 1);
     } else {
-      normX = (xVal - plotBounds.minX) / (plotBounds.maxX - plotBounds.minX || 1);
+      normX = (xVal - effectiveBounds.minX) / (effectiveBounds.maxX - effectiveBounds.minX || 1);
     }
 
     if (yLog) {
-      const logMin = Math.log10(Math.max(0.0001, plotBounds.minY));
-      const logMax = Math.log10(Math.max(0.0001, plotBounds.maxY));
+      const logMin = Math.log10(Math.max(0.0001, effectiveBounds.minY));
+      const logMax = Math.log10(Math.max(0.0001, effectiveBounds.maxY));
       normY = (Math.log10(Math.max(0.0001, yVal)) - logMin) / (logMax - logMin || 1);
     } else {
-      normY = (yVal - plotBounds.minY) / (plotBounds.maxY - plotBounds.minY || 1);
+      normY = (yVal - effectiveBounds.minY) / (effectiveBounds.maxY - effectiveBounds.minY || 1);
     }
 
     const cx = padLeft + normX * plotW;
     const cy = padTop + (1 - normY) * plotH;
     return { cx, cy };
+  };
+
+  const getSvgCoordinates = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!svgScatterRef.current) return null;
+    const rect = svgScatterRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 700;
+    const y = ((e.clientY - rect.top) / rect.height) * 480;
+    return { x, y };
+  };
+
+  const svgXToData = (svgX: number) => {
+    const clampedX = Math.max(padLeft, Math.min(padLeft + plotW, svgX));
+    const normX = (clampedX - padLeft) / plotW;
+    if (xLog) {
+      const logMin = Math.log10(Math.max(0.0001, effectiveBounds.minX));
+      const logMax = Math.log10(Math.max(0.0001, effectiveBounds.maxX));
+      return Math.pow(10, logMin + normX * (logMax - logMin));
+    } else {
+      return effectiveBounds.minX + normX * (effectiveBounds.maxX - effectiveBounds.minX);
+    }
+  };
+
+  const svgYToData = (svgY: number) => {
+    const clampedY = Math.max(padTop, Math.min(padTop + plotH, svgY));
+    const normY = 1 - (clampedY - padTop) / plotH;
+    if (yLog) {
+      const logMin = Math.log10(Math.max(0.0001, effectiveBounds.minY));
+      const logMax = Math.log10(Math.max(0.0001, effectiveBounds.maxY));
+      return Math.pow(10, logMin + normY * (logMax - logMin));
+    } else {
+      return effectiveBounds.minY + normY * (effectiveBounds.maxY - effectiveBounds.minY);
+    }
+  };
+
+  const handleSvgMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (e.button !== 0) return;
+    const coords = getSvgCoordinates(e);
+    if (!coords) return;
+    if (
+      coords.x >= padLeft &&
+      coords.x <= padLeft + plotW &&
+      coords.y >= padTop &&
+      coords.y <= padTop + plotH
+    ) {
+      hasDraggedRef.current = false;
+      setIsBoxSelecting(true);
+      setSelectionBox({
+        startX: coords.x,
+        startY: coords.y,
+        currentX: coords.x,
+        currentY: coords.y,
+      });
+    }
+  };
+
+  const handleSvgMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!isBoxSelecting || !selectionBox) return;
+    const coords = getSvgCoordinates(e);
+    if (!coords) return;
+    const dist = Math.hypot(coords.x - selectionBox.startX, coords.y - selectionBox.startY);
+    if (dist > 5) {
+      hasDraggedRef.current = true;
+    }
+    const clampedX = Math.max(padLeft, Math.min(padLeft + plotW, coords.x));
+    const clampedY = Math.max(padTop, Math.min(padTop + plotH, coords.y));
+    setSelectionBox((prev) =>
+      prev ? { ...prev, currentX: clampedX, currentY: clampedY } : null
+    );
+  };
+
+  const handleSvgMouseUp = () => {
+    if (!isBoxSelecting || !selectionBox) {
+      setIsBoxSelecting(false);
+      setSelectionBox(null);
+      return;
+    }
+
+    const x1 = Math.min(selectionBox.startX, selectionBox.currentX);
+    const x2 = Math.max(selectionBox.startX, selectionBox.currentX);
+    const y1 = Math.min(selectionBox.startY, selectionBox.currentY);
+    const y2 = Math.max(selectionBox.startY, selectionBox.currentY);
+
+    const deltaX = x2 - x1;
+    const deltaY = y2 - y1;
+
+    setIsBoxSelecting(false);
+    setSelectionBox(null);
+
+    // Require meaningful drag box (>= 8px in both directions)
+    if (deltaX >= 8 && deltaY >= 8) {
+      const dataX1 = svgXToData(x1);
+      const dataX2 = svgXToData(x2);
+      const dataY1 = svgYToData(y2); // bottom of box in screen corresponds to lower data Y
+      const dataY2 = svgYToData(y1); // top of box in screen corresponds to upper data Y
+
+      const minX = Math.min(dataX1, dataX2);
+      const maxX = Math.max(dataX1, dataX2);
+      const minY = Math.min(dataY1, dataY2);
+      const maxY = Math.max(dataY1, dataY2);
+
+      if (maxX > minX && maxY > minY) {
+        setZoomRange({ minX, maxX, minY, maxY });
+      }
+    }
   };
 
   const handleSelectAll = () => {
@@ -722,10 +861,22 @@ export const VisualisationsPage: React.FC = () => {
           {/* Right Column: Dynamic SVG / HTML5 Plot */}
           <div className="lg:col-span-3 bg-obsidian-950 border border-obsidian-800 rounded-2xl p-4 sm:p-6 flex flex-col justify-between shadow-2xl relative reticle-box">
             
-            {/* Plot Top Info & Pinned Hover HUD (Prevents Flickering) */}
+            {/* Plot Top Info, Reset Zoom & Pinned Hover HUD */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs font-mono border-b border-obsidian-800 pb-3 mb-3 text-slate-400 gap-2">
-              <div>
-                Plotted: <strong className="text-white">{activeScatterData.length}</strong> sources
+              <div className="flex items-center space-x-3">
+                <div>
+                  Plotted: <strong className="text-white">{activeScatterData.length}</strong> sources
+                </div>
+                {zoomRange && (
+                  <button
+                    onClick={() => setZoomRange(null)}
+                    className="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-[#9F80F8]/20 hover:bg-[#9F80F8]/30 border border-[#9F80F8] text-[#C4B2FB] text-[11px] transition shadow-sm"
+                    title="Reset scatter plot zoom to default bounds"
+                  >
+                    <RotateCcw className="w-3 h-3 text-[#9F80F8]" />
+                    <span>Reset Zoom</span>
+                  </button>
+                )}
               </div>
               
               {/* Stable Hover Telemetry Badge */}
@@ -739,15 +890,29 @@ export const VisualisationsPage: React.FC = () => {
                   </div>
                 ) : (
                   <span className="text-[11px] text-slate-500">
-                    Hover over data points to inspect • Click to open details
+                    Click &amp; drag box to zoom in • Double-click or click Reset Zoom to return
                   </span>
                 )}
               </div>
             </div>
 
             {/* SVG Plot Canvas */}
-            <div className="relative w-full h-[480px] bg-obsidian-900/50 rounded-xl border border-obsidian-800/80 overflow-hidden">
-              <svg className="w-full h-full select-none" viewBox="0 0 700 480">
+            <div className="relative w-full h-[480px] bg-obsidian-900/50 rounded-xl border border-obsidian-800/80 overflow-hidden cursor-crosshair">
+              <svg
+                ref={svgScatterRef}
+                className="w-full h-full select-none"
+                viewBox="0 0 700 480"
+                onMouseDown={handleSvgMouseDown}
+                onMouseMove={handleSvgMouseMove}
+                onMouseUp={handleSvgMouseUp}
+                onDoubleClick={() => setZoomRange(null)}
+              >
+                <defs>
+                  <clipPath id="scatterPlotAreaClip">
+                    <rect x="65" y="30" width="605" height="395" />
+                  </clipPath>
+                </defs>
+
                 {/* Background gridlines */}
                 {[0.25, 0.5, 0.75].map((pct) => (
                   <React.Fragment key={pct}>
@@ -807,77 +972,101 @@ export const VisualisationsPage: React.FC = () => {
 
                 {/* Ticks X */}
                 <text x="65" y="440" fill="#64748b" fontSize="10" textAnchor="start" fontFamily="monospace">
-                  {plotBounds.minX.toFixed(1)}
+                  {Math.abs(effectiveBounds.maxX - effectiveBounds.minX) < 1 ? effectiveBounds.minX.toFixed(3) : effectiveBounds.minX.toFixed(1)}
                 </text>
                 <text x="670" y="440" fill="#64748b" fontSize="10" textAnchor="end" fontFamily="monospace">
-                  {plotBounds.maxX.toFixed(1)}
+                  {Math.abs(effectiveBounds.maxX - effectiveBounds.minX) < 1 ? effectiveBounds.maxX.toFixed(3) : effectiveBounds.maxX.toFixed(1)}
                 </text>
 
                 {/* Ticks Y */}
                 <text x="58" y="425" fill="#64748b" fontSize="10" textAnchor="end" fontFamily="monospace">
-                  {plotBounds.minY.toFixed(1)}
+                  {Math.abs(effectiveBounds.maxY - effectiveBounds.minY) < 1 ? effectiveBounds.minY.toFixed(3) : effectiveBounds.minY.toFixed(1)}
                 </text>
                 <text x="58" y="36" fill="#64748b" fontSize="10" textAnchor="end" fontFamily="monospace">
-                  {plotBounds.maxY.toFixed(1)}
+                  {Math.abs(effectiveBounds.maxY - effectiveBounds.minY) < 1 ? effectiveBounds.maxY.toFixed(3) : effectiveBounds.maxY.toFixed(1)}
                 </text>
 
-                {/* Data Points (Stabilized with generous hit area to prevent flickering) */}
-                {activeScatterData.map(({ rrat, x, y }) => {
-                  const { cx, cy } = getCanvasCoords(x, y, 700, 480);
-                  const dm = rrat.properties.best_dm_pc_cm3 ?? rrat.discovery_info.detection_dm_pc_cm3 ?? 20;
-                  const isHovered = hoveredScatterPoint?.rrat.source_name === rrat.source_name;
+                {/* Data Points (Clipped to plot rectangle to prevent spillover when zoomed) */}
+                <g clipPath="url(#scatterPlotAreaClip)">
+                  {activeScatterData.map(({ rrat, x, y }) => {
+                    const { cx, cy } = getCanvasCoords(x, y);
+                    const dm = rrat.properties.best_dm_pc_cm3 ?? rrat.discovery_info.detection_dm_pc_cm3 ?? 20;
+                    const isHovered = hoveredScatterPoint?.rrat.source_name === rrat.source_name;
 
-                  let fillColor = '#00f0ff';
-                  if (dm < 20) fillColor = '#10b981';
-                  else if (dm > 500) fillColor = '#f43f5e';
-                  else if (dm > 80) fillColor = '#9F80F8';
+                    let fillColor = '#00f0ff';
+                    if (dm < 20) fillColor = '#10b981';
+                    else if (dm > 500) fillColor = '#f43f5e';
+                    else if (dm > 80) fillColor = '#9F80F8';
 
-                  return (
-                    <g
-                      key={rrat.source_name}
-                      className="cursor-pointer"
-                      onClick={() => setSelectedRratForModal(rrat)}
-                      onMouseEnter={() => {
-                        setHoveredScatterPoint({
-                          rrat,
-                          xVal: x,
-                          yVal: y,
-                          posX: cx,
-                          posY: cy,
-                        });
-                      }}
-                      onMouseLeave={() => {
-                        setHoveredScatterPoint((prev) => 
-                          prev?.rrat.source_name === rrat.source_name ? null : prev
-                        );
-                      }}
-                    >
-                      {/* Invisible stable hit-target */}
-                      <circle cx={cx} cy={cy} r="14" fill="transparent" />
-
-                      {/* Visible Star Point */}
-                      <circle
-                        cx={cx}
-                        cy={cy}
-                        r={isHovered ? 8 : 5.5}
-                        fill={fillColor}
-                        fillOpacity={isHovered ? 1 : 0.85}
-                        stroke={isHovered ? '#ffffff' : '#141822'}
-                        strokeWidth={isHovered ? 2.5 : 1.2}
-                      />
-                      <text
-                        x={cx + 8}
-                        y={cy + 3}
-                        fill={isHovered ? '#ffffff' : '#94a3b8'}
-                        fontSize="9"
-                        fontFamily="monospace"
-                        className="pointer-events-none font-medium"
+                    return (
+                      <g
+                        key={rrat.source_name}
+                        className="cursor-pointer"
+                        onClick={() => {
+                          if (!hasDraggedRef.current) {
+                            setSelectedRratForModal(rrat);
+                          }
+                        }}
+                        onMouseEnter={() => {
+                          if (!isBoxSelecting) {
+                            setHoveredScatterPoint({
+                              rrat,
+                              xVal: x,
+                              yVal: y,
+                              posX: cx,
+                              posY: cy,
+                            });
+                          }
+                        }}
+                        onMouseLeave={() => {
+                          setHoveredScatterPoint((prev) => 
+                            prev?.rrat.source_name === rrat.source_name ? null : prev
+                          );
+                        }}
                       >
-                        {rrat.source_name}
-                      </text>
-                    </g>
-                  );
-                })}
+                        {/* Invisible stable hit-target */}
+                        <circle cx={cx} cy={cy} r="14" fill="transparent" />
+
+                        {/* Visible Star Point */}
+                        <circle
+                          cx={cx}
+                          cy={cy}
+                          r={isHovered ? 8 : 5.5}
+                          fill={fillColor}
+                          fillOpacity={isHovered ? 1 : 0.85}
+                          stroke={isHovered ? '#ffffff' : '#141822'}
+                          strokeWidth={isHovered ? 2.5 : 1.2}
+                        />
+                        <text
+                          x={cx + 8}
+                          y={cy + 3}
+                          fill={isHovered ? '#ffffff' : '#94a3b8'}
+                          fontSize="9"
+                          fontFamily="monospace"
+                          className="pointer-events-none font-medium"
+                        >
+                          {rrat.source_name}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
+
+                {/* Mouse Drag Region Selection Marquee Box */}
+                {selectionBox && Math.hypot(selectionBox.currentX - selectionBox.startX, selectionBox.currentY - selectionBox.startY) > 3 && (
+                  <rect
+                    x={Math.min(selectionBox.startX, selectionBox.currentX)}
+                    y={Math.min(selectionBox.startY, selectionBox.currentY)}
+                    width={Math.abs(selectionBox.currentX - selectionBox.startX)}
+                    height={Math.abs(selectionBox.currentY - selectionBox.startY)}
+                    fill="#9F80F8"
+                    fillOpacity={0.2}
+                    stroke="#9F80F8"
+                    strokeWidth={1.5}
+                    strokeDasharray="4 2"
+                    className="pointer-events-none"
+                  />
+                )}
               </svg>
             </div>
 
