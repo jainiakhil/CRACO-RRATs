@@ -15,7 +15,7 @@ try {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  base: process.env.NODE_ENV === 'production' ? '/craco-rrats/' : '/',
   server: {
     port: 5173,
     host: true,

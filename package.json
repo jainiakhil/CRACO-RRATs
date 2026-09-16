@@ -2,6 +2,7 @@
   "name": "craco-rrats-website",
   "private": true,
   "version": "1.0.0",
+  "homepage": "https://jainiakhil.github.io/craco-rrats",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -1,34 +1,86 @@
+# ==============================================================================
+# CRACO RRATs Observatory - Git Ignore Configuration
+# ==============================================================================
+
 # Dependencies
 node_modules/
 /.pnp
 .pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
-# Production build
+# Production build outputs
 dist/
 dist-ssr/
+build/
+out/
 *.local
 
-# Vite & cache
+# Vite, compilation, & TypeScript caches
 .vite/
 .eslintcache
+tsconfig.tsbuildinfo
+*.tsbuildinfo
 
-# Logs
+# Agent instructions & AI configuration (per project standards)
+AGENTS.md
+CLAUDE.md
+COPILOT.md
+.agents/
+.agent/
+.gemini/
+.antigravity/
+.cursor/
+.windsurf/
+
+# Implementation plans & agent task artifacts
+implementation_plan*.md
+walkthrough*.md
+*.plan.md
+*plan*.md
+task*.md
+scratch/
+tmp/
+temp/
+*.tmp
+
+# Research papers & proprietary documents (strictly excluded from tracking)
+CRACO_RRAT_Discovery__MNRAS_.pdf
+*.pdf
+
+# Environment variables & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Logs & debugging output
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-*.log
 
-# OS & Editor files
+# OS & Editor metadata
 .DS_Store
 Thumbs.db
+desktop.ini
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea/
+*.sublime-workspace
+*.sublime-project
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Research paper (explicitly ignored per user instruction)
-CRACO_RRAT_Discovery__MNRAS_.pdf
-*.pdf
-
-tsconfig.tsbuildinfo
