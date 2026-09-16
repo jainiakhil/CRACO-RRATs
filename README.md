@@ -7,7 +7,7 @@
 ### Coherent Real-Time Automatic Candidate Optimizer (CRACO)
 **Australian Square Kilometre Array Pathfinder (ASKAP) Fast Transient Science & Parkes Follow-Up**
 
-[![Live Portal](https://img.shields.io/badge/Live_Portal-jainiakhil.github.io%2Fcraco--rrats-9F80F8?style=for-the-badge&logo=github)](https://jainiakhil.github.io/craco-rrats)
+[![Live Portal](https://img.shields.io/badge/Live_Portal-jainiakhil.github.io%2FCRACO--RRATs-9F80F8?style=for-the-badge&logo=github)](https://jainiakhil.github.io/CRACO-RRATs/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -213,20 +213,20 @@ Open [http://localhost:5173/](http://localhost:5173/) in your web browser to vie
 ```bash
 npm run build
 ```
-This compiles TypeScript types (`tsc -b`) and executes Vite's production bundling, outputting optimized static assets to `dist/` with the `/craco-rrats/` base path.
+This compiles TypeScript types (`tsc -b`) and executes Vite's production bundling, outputting optimized static assets to `dist/` with relative paths (`./`) compatible with GitHub Pages.
 
 ### 5. Local Production Preview
 ```bash
 npm run preview
 ```
-Previews the production build locally at [http://localhost:4173/craco-rrats/](http://localhost:4173/craco-rrats/).
+Previews the production build locally at [http://localhost:4173/](http://localhost:4173/).
 
 ---
 
 ## 🚢 GitHub Pages Deployment
 
 The website is hosted on **GitHub Pages** at:
-**`https://jainiakhil.github.io/craco-rrats`**
+**`https://jainiakhil.github.io/CRACO-RRATs/`**
 
 ### Automated Deployment via GitHub Actions
 Every push to the `main` branch triggers the automated deployment pipeline configured in [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml).
@@ -234,7 +234,7 @@ Every push to the `main` branch triggers the automated deployment pipeline confi
 To ensure GitHub Pages serves from GitHub Actions:
 1. Navigate to your repository on GitHub: `https://github.com/jainiakhil/CRACO-RRATs`.
 2. Go to **Settings** &rarr; **Pages**.
-3. Under **Build and deployment** &rarr; **Source**, select **GitHub Actions**.
+3. Under **Build and deployment** &rarr; **Source**, select **GitHub Actions** (or select **Deploy from a branch** and choose branch **`gh-pages`**).
 4. Future commits to `main` will build and publish the live observatory automatically.
 
 ---
@@ -253,7 +253,7 @@ If you use data, dynamic spectra, or visualisations from this catalogue in your 
   pages    = {2841--2859},
   year     = {2026},
   doi      = {10.1093/mnras/stad2026},
-  url      = {https://jainiakhil.github.io/craco-rrats}
+  url      = {https://jainiakhil.github.io/CRACO-RRATs/}
 }
 ```
 
